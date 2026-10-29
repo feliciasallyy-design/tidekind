@@ -1,0 +1,8 @@
+{
+  "name": "Tidekind Oceanic Stewardship",
+  "description": "Global marine ghost gear salvage, interactive multi-ocean radar mapping, circular net recycling, and coastal community action platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
