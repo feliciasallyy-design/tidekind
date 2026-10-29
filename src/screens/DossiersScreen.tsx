@@ -134,7 +134,7 @@ export const DossiersScreen: React.FC<DossiersScreenProps> = ({
           </span>
           <input
             value={search}
-            onChange={(e) => setSearch}
+            onChange={(e) => setSearch(e.target.value)}
             className="w-full h-11 pl-11 pr-4 bg-white text-[#151c22] rounded-full text-xs sm:text-sm border border-[#e8eff7] shadow-xs focus:outline-none focus:ring-2 focus:ring-[#006a63]"
             placeholder="Search gear ID, tag, or material..."
             type="search"

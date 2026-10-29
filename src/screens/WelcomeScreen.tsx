@@ -236,9 +236,12 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onNavigate, showTo
                 Over 1,200 meters of ghost nylon woven into new port bags this month.
               </p>
             </div>
-            <span className="w-10 h-10 rounded-2xl bg-[#90f4e9]/30 text-[#006a63] flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined">handshake</span>
-            </span>
+            <button
+              onClick={() => onNavigate('recycling')}
+              className="btn-cool-primary px-3 py-1.5 rounded-full text-xs font-bold shrink-0 active:scale-95 transition-all shadow-xs"
+            >
+              Explore
+            </button>
           </div>
         </div>
 

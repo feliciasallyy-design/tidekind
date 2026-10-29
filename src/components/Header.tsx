@@ -132,7 +132,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Notifications Button */}
             <button
               type="button"
-              onClick={() => setShowNotifications(!showNotifications)}
+              onClick={onOpenNotifications ? onOpenNotifications : () => setShowNotifications(!showNotifications)}
               aria-label="Notifications"
               className="relative w-9 h-9 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/10 transition-colors active:scale-95"
             >

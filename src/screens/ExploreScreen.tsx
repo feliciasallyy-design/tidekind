@@ -388,12 +388,16 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({ onNavigate, showTo
             {/* Floating Zoom Buttons (Bottom Right) */}
             <div className="absolute bottom-4 right-4 flex flex-col gap-1.5 z-20">
               <button
+                type="button"
+                aria-label="Zoom in"
                 onClick={() => leafletMapRef.current?.zoomIn()}
                 className="w-8 h-8 rounded-full bg-white/95 text-[#002531] shadow-md flex items-center justify-center font-bold active:scale-90 hover:bg-white text-base"
               >
                 +
               </button>
               <button
+                type="button"
+                aria-label="Zoom out"
                 onClick={() => leafletMapRef.current?.zoomOut()}
                 className="w-8 h-8 rounded-full bg-white/95 text-[#002531] shadow-md flex items-center justify-center font-bold active:scale-90 hover:bg-white text-base"
               >
