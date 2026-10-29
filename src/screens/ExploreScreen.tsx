@@ -67,15 +67,15 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({ onNavigate, showTo
         attributionControl: false,
       });
 
-      // CartoDB Voyager / Positron tiles for high-contrast crisp oceanic mapping
+      // Free Open Source Map Tiles (No API key required)
       const tileUrl =
         mapTileLayer === 'tactical'
-          ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-          : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+          ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+          : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
       const tiles = L.tileLayer(tileUrl, {
         maxZoom: 19,
-        subdomains: 'abcd',
+        attribution: '&copy; OpenStreetMap contributors',
       }).addTo(map);
 
       tileLayerRef.current = tiles;
@@ -192,7 +192,7 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({ onNavigate, showTo
     }
   };
 
-  // Toggle map tiles (Voyager ocean vs Dark tactical)
+  // Toggle map tiles (Standard OpenStreetMap vs Satellite Imagery)
   const handleToggleTileTheme = () => {
     const nextTheme = mapTileLayer === 'ocean' ? 'tactical' : 'ocean';
     setMapTileLayer(nextTheme);
@@ -200,12 +200,12 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({ onNavigate, showTo
       tileLayerRef.current.remove();
       const tileUrl =
         nextTheme === 'tactical'
-          ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-          : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
-      tileLayerRef.current = L.tileLayer(tileUrl, { maxZoom: 19, subdomains: 'abcd' }).addTo(
+          ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+          : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+      tileLayerRef.current = L.tileLayer(tileUrl, { maxZoom: 19 }).addTo(
         leafletMapRef.current
       );
-      showToast(`Switched to ${nextTheme === 'tactical' ? 'Tactical Dark' : 'Nautical Voyager'} map`, 'layers');
+      showToast(`Switched to ${nextTheme === 'tactical' ? 'Satellite Imagery' : 'Nautical Street'} map`, 'layers');
     }
   };
 

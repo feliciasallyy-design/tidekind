@@ -165,19 +165,32 @@ export const CommunityFeedScreen: React.FC<CommunityFeedScreenProps> = ({
 
       {/* Feed Container */}
       <div className="space-y-4">
-        {feedPosts.length === 0 ? (
-          <div className="bg-white rounded-3xl p-8 text-center border border-[#e8eff7]">
-            <span className="material-symbols-outlined text-4xl text-[#72787c] mb-2">forum</span>
-            <p className="text-sm font-bold text-[#151c22]">No field reports yet</p>
-            <p className="text-xs text-[#41484b] mt-1">Be the first steward to post an update!</p>
-          </div>
-        ) : (
-          feedPosts.map((post) => {
+        {(() => {
+          const filtered = feedPosts.filter((post) => {
+            if (activeTab === 'all') return true;
+            const text = (post.content + ' ' + post.authorRole).toLowerCase();
+            if (activeTab === 'volunteer') return text.includes('volunteer') || text.includes('sweep') || text.includes('crew') || text.includes('needed') || text.includes('request');
+            if (activeTab === 'repair') return text.includes('mend') || text.includes('repair') || text.includes('yarn') || text.includes('circular') || text.includes('spinning') || text.includes('repurpose');
+            if (activeTab === 'verified') return text.includes('survey') || text.includes('completed') || text.includes('verified') || text.includes('extricat') || text.includes('dispatched');
+            return true;
+          });
+
+          if (filtered.length === 0) {
+            return (
+              <div className="bg-white rounded-3xl p-8 text-center border border-[#e8eff7]">
+                <span className="material-symbols-outlined text-4xl text-[#72787c] mb-2">forum</span>
+                <p className="text-sm font-bold text-[#151c22]">No updates in this category</p>
+                <p className="text-xs text-[#41484b] mt-1">Switch to "All Updates" to view all global field sorties.</p>
+              </div>
+            );
+          }
+
+          return filtered.map((post) => {
             const isLikedByUser = Boolean(user && post.likedBy?.includes(user.id));
             return (
               <article
                 key={post.id}
-                className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-[#e8eff7] flex flex-col gap-3"
+                className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-[#e8eff7] flex flex-col gap-3 transition-all hover:shadow-md"
               >
                 {/* Author Header */}
                 <div className="flex items-start justify-between gap-2">
@@ -185,53 +198,54 @@ export const CommunityFeedScreen: React.FC<CommunityFeedScreenProps> = ({
                     <img
                       src={post.authorAvatar || ASSETS.userProfile}
                       alt={post.authorName}
-                      className="w-11 h-11 rounded-full object-cover ring-2 ring-[#006a63]/30 bg-[#eef4fc] shrink-0"
+                      className="w-11 h-11 rounded-full object-cover ring-2 ring-[#006a63]/40 bg-[#eef4fc] shrink-0"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = ASSETS.userProfile;
                       }}
                     />
                     <div className="flex flex-col min-w-0">
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         <span className="text-xs font-bold text-[#151c22] truncate">{post.authorName}</span>
                         <span className="material-symbols-outlined text-[#006a63] text-sm">verified</span>
                       </div>
-                      <span className="text-[11px] text-[#41484b] truncate">{post.authorRole}</span>
-                      <span className="text-[10px] text-[#72787c]">
-                        {post.timeAgo} • {post.location}
+                      <span className="text-[11px] text-[#41484b] truncate font-medium">{post.authorRole}</span>
+                      <span className="text-[10px] text-[#72787c] flex items-center gap-1">
+                        <span className="material-symbols-outlined text-xs text-[#006a63]">location_on</span>
+                        <span>{post.timeAgo} • {post.location}</span>
                       </span>
                     </div>
                   </div>
 
                   <button
-                    onClick={() => showToast('Flagged for marine community review', 'flag')}
-                    className="text-[#72787c] hover:text-[#ba1a1a] p-1 rounded-full"
-                    title="Flag"
+                    onClick={() => showToast('Field report endorsed for marine archive', 'verified')}
+                    className="text-[#72787c] hover:text-[#006a63] p-1 rounded-full active:scale-90"
+                    title="Bookmark"
                   >
-                    <span className="material-symbols-outlined text-lg">flag</span>
+                    <span className="material-symbols-outlined text-lg">bookmark</span>
                   </button>
                 </div>
 
                 {/* Content */}
-                <p className="text-xs sm:text-sm text-[#151c22] leading-relaxed whitespace-pre-line">
+                <p className="text-xs sm:text-sm text-[#151c22] leading-relaxed whitespace-pre-line font-normal">
                   {post.content}
                 </p>
 
                 {/* Optional Media */}
                 {post.imageUrl && (
-                  <div className="rounded-2xl overflow-hidden bg-[#002531] relative h-48">
+                  <div className="rounded-2xl overflow-hidden bg-[#002531] relative h-48 border border-white/10">
                     <img src={post.imageUrl} alt="Field post attachment" className="w-full h-full object-cover" />
                   </div>
                 )}
 
-                {/* Actions */}
-                <div className="pt-1 flex items-center justify-between border-t border-[#e8eff7]">
+                {/* Actions with Cool Buttons */}
+                <div className="pt-2 flex items-center justify-between border-t border-[#e8eff7]">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleToggleLike(post.id)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                      className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95 ${
                         isLikedByUser
-                          ? 'bg-[#90f4e9] text-[#00504a] shadow-xs'
-                          : 'bg-[#f6faff] hover:bg-[#eef4fc] text-[#41484b]'
+                          ? 'btn-cool-accent shadow-xs'
+                          : 'bg-[#f6faff] hover:bg-[#e8eff7] text-[#002531] border border-[#dce3eb]'
                       }`}
                     >
                       <span className="material-symbols-outlined text-base">
@@ -242,25 +256,25 @@ export const CommunityFeedScreen: React.FC<CommunityFeedScreenProps> = ({
 
                     <button
                       onClick={() => setActiveCommentPost(post)}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#f6faff] hover:bg-[#eef4fc] text-[#41484b] text-xs font-semibold transition-colors"
+                      className="btn-cool-glow flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-[#90f4e9] active:scale-95"
                     >
-                      <span className="material-symbols-outlined text-base">mode_comment</span>
+                      <span className="material-symbols-outlined text-base">chat_bubble</span>
                       <span>{post.comments?.length || 0}</span>
                     </button>
                   </div>
 
                   <button
                     onClick={handleShare}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#f6faff] hover:bg-[#eef4fc] text-[#41484b] text-xs font-semibold"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#f6faff] hover:bg-[#e8eff7] text-[#41484b] text-xs font-semibold active:scale-95 border border-[#dce3eb]"
                   >
                     <span className="material-symbols-outlined text-base">share</span>
-                    <span>Share</span>
+                    <span className="hidden sm:inline">Share</span>
                   </button>
                 </div>
               </article>
             );
-          })
-        )}
+          });
+        })()}
       </div>
 
       {/* Post Composer Modal */}
