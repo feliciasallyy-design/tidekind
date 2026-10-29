@@ -35,7 +35,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
             {!user ? (
               <button
-                onClick={() => setAuthModalOpen(true)}
+                onClick={() => onNavigate('auth')}
                 className="btn-cool-primary text-[11px] font-bold px-3 py-1 rounded-full shadow-xs active:scale-95 transition-all"
               >
                 Sign In / Join

@@ -49,6 +49,8 @@ export const Header: React.FC<HeaderProps> = ({
         return 'Circularity Exchange';
       case 'profile':
         return 'Steward Profile';
+      case 'auth':
+        return 'Steward Portal';
       case 'welcome':
         return 'Onboarding';
       case 'navigator':
@@ -159,7 +161,7 @@ export const Header: React.FC<HeaderProps> = ({
             ) : (
               <button
                 type="button"
-                onClick={() => setAuthModalOpen(true)}
+                onClick={() => onNavigate('auth')}
                 className="btn-cool-accent inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold active:scale-95 transition-all shadow-md"
                 title="Sign in or register"
               >

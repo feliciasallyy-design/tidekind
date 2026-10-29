@@ -106,6 +106,14 @@ export const QuickNavigatorModal: React.FC<QuickNavigatorModalProps> = ({
       desc: 'Alex Steward (Tier 2), QR muster badge & salvage ledger',
     },
     {
+      id: 'auth',
+      num: '12',
+      title: 'Steward Sign In & Access Portal',
+      category: 'Authentication',
+      icon: 'badge',
+      desc: 'Instant 1-click test sign in, avatar picker & password recovery',
+    },
+    {
       id: 'navigator',
       num: 'All',
       title: 'Prototype Navigator Overview',
@@ -131,7 +139,7 @@ export const QuickNavigatorModal: React.FC<QuickNavigatorModalProps> = ({
                   Screen Switchboard
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-[#151c22]">All 11 Connected Screens</h3>
+              <h3 className="text-lg font-bold text-[#151c22]">All 12 Connected Screens</h3>
             </div>
           </div>
           <button

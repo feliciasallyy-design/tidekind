@@ -25,6 +25,7 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({ onNavigate, showTo
   const [isSonarPinging, setIsSonarPinging] = useState<boolean>(false);
   const [cursorCoords, setCursorCoords] = useState<string>('8.7052° S, 115.2625° E');
   const [mapTileLayer, setMapTileLayer] = useState<'ocean' | 'satellite' | 'tactical'>('ocean');
+  const [showGoogleEmbed, setShowGoogleEmbed] = useState<boolean>(false);
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const leafletMapRef = useRef<L.Map | null>(null);
@@ -483,37 +484,90 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({ onNavigate, showTo
                 </div>
               </div>
 
+              {/* Google Maps Live View (Zero API Key Required) */}
+              {showGoogleEmbed && (
+                <div className="rounded-2xl overflow-hidden border-2 border-[#123b4a] bg-[#001f29] shadow-inner p-1 animate-fadeIn">
+                  <div className="flex items-center justify-between px-3 py-1.5 text-white text-[11px] font-bold">
+                    <span className="flex items-center gap-1.5 text-[#90f4e9]">
+                      <span className="material-symbols-outlined text-sm">map</span>
+                      <span>Google Maps Live (No API Key Required)</span>
+                    </span>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        selectedLocation.name + ' ' + selectedLocation.address
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#90f4e9] hover:underline flex items-center gap-0.5 text-[10px]"
+                    >
+                      <span>Full Google Maps ↗</span>
+                    </a>
+                  </div>
+                  <iframe
+                    title={`Google Map - ${selectedLocation.name}`}
+                    src={`https://maps.google.com/maps?q=${selectedLocation.lat},${selectedLocation.lng}&hl=en&z=15&output=embed`}
+                    className="w-full h-56 rounded-xl border-0"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+
               {/* Cool Action Buttons Row */}
-              <div className="grid grid-cols-3 gap-2 pt-1">
-                <button
-                  onClick={() =>
-                    showToast(
-                      `Waypoint locked: ${selectedLocation.lat.toFixed(4)}, ${selectedLocation.lng.toFixed(4)}`,
-                      'navigation',
-                      'success'
-                    )
-                  }
-                  className="btn-cool-primary min-h-[46px] py-2 rounded-2xl text-xs font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95 transition-all"
+              <div className="grid grid-cols-4 gap-2 pt-1">
+                {/* 1. Direct Google Maps External Link */}
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    selectedLocation.name + ' ' + selectedLocation.address
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-cool-primary min-h-[46px] py-2 px-1 rounded-2xl text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95 transition-all text-white text-center"
+                  title="Open in Google Maps"
                 >
-                  <span className="material-symbols-outlined text-lg">directions</span>
-                  <span>Route Pilot</span>
+                  <span className="material-symbols-outlined text-base">near_me</span>
+                  <span className="leading-tight">Google Maps ↗</span>
+                </a>
+
+                {/* 2. Embedded Google Maps Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowGoogleEmbed(!showGoogleEmbed)}
+                  className={`min-h-[46px] py-2 px-1 rounded-2xl text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95 transition-all leading-tight ${
+                    showGoogleEmbed
+                      ? 'bg-[#123b4a] text-[#90f4e9] ring-2 ring-[#90f4e9]'
+                      : 'btn-cool-glow text-[#90f4e9]'
+                  }`}
+                  title="Toggle Google Maps Live View"
+                >
+                  <span className="material-symbols-outlined text-base">
+                    {showGoogleEmbed ? 'map' : 'explore'}
+                  </span>
+                  <span>{showGoogleEmbed ? 'Hide Map' : 'Embed View'}</span>
                 </button>
 
+                {/* 3. Recycling Guide */}
                 <button
+                  type="button"
                   onClick={() => onNavigate('recycling')}
-                  className="btn-cool-glow min-h-[46px] py-2 rounded-2xl text-xs font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95 transition-all"
+                  className="btn-cool-glow min-h-[46px] py-2 px-1 rounded-2xl text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95 transition-all text-[#90f4e9] leading-tight"
                 >
-                  <span className="material-symbols-outlined text-lg text-[#90f4e9]">recycling</span>
+                  <span className="material-symbols-outlined text-base">recycling</span>
                   <span>Drop Guide</span>
                 </button>
 
+                {/* 4. Radio VHF */}
                 <button
+                  type="button"
                   onClick={() =>
-                    showToast(`Radio hail to ${selectedLocation.name} frequency 156.8 MHz (Ch 16)...`, 'settings_input_antenna', 'info')
+                    showToast(
+                      `Radio hail to ${selectedLocation.name} frequency 156.8 MHz (Ch 16)...`,
+                      'settings_input_antenna',
+                      'info'
+                    )
                   }
-                  className="btn-cool-accent min-h-[46px] py-2 rounded-2xl text-xs font-bold flex flex-col items-center justify-center gap-0.5 active:scale-95 transition-all"
+                  className="btn-cool-accent min-h-[46px] py-2 px-1 rounded-2xl text-[11px] font-bold flex flex-col items-center justify-center gap-0.5 active:scale-95 transition-all leading-tight"
                 >
-                  <span className="material-symbols-outlined text-lg">
+                  <span className="material-symbols-outlined text-base">
                     settings_input_antenna
                   </span>
                   <span>Radio VHF</span>
@@ -580,23 +634,36 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({ onNavigate, showTo
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between pt-2 border-t border-[#e8eff7]">
+                <div className="flex items-center justify-between pt-2 border-t border-[#e8eff7] gap-2 flex-wrap">
                   <span className="text-xs text-[#006a63] font-semibold flex items-center gap-1">
                     <span className="material-symbols-outlined text-sm">schedule</span>
                     <span>{loc.hours}</span>
                   </span>
 
-                  <button
-                    onClick={() => {
-                      setSelectedPinId(loc.id);
-                      setViewMode('map');
-                      showToast(`Focused map on ${loc.name}`, 'pin_drop');
-                    }}
-                    className="btn-cool-primary px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 active:scale-95"
-                  >
-                    <span>View on Map</span>
-                    <span className="material-symbols-outlined text-xs">arrow_forward</span>
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.name + ' ' + loc.address)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-cool-glow px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 text-[#90f4e9] active:scale-95"
+                      title="Open in Google Maps"
+                    >
+                      <span className="material-symbols-outlined text-xs">near_me</span>
+                      <span>Google Maps ↗</span>
+                    </a>
+
+                    <button
+                      onClick={() => {
+                        setSelectedPinId(loc.id);
+                        setViewMode('map');
+                        showToast(`Focused map on ${loc.name}`, 'pin_drop');
+                      }}
+                      className="btn-cool-primary px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 active:scale-95"
+                    >
+                      <span>Radar</span>
+                      <span className="material-symbols-outlined text-xs">arrow_forward</span>
+                    </button>
+                  </div>
                 </div>
               </article>
             ))}

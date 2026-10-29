@@ -10,6 +10,7 @@ export type ScreenId =
   | 'community-feed'
   | 'recycling'
   | 'profile'
+  | 'auth'
   | 'navigator';
 
 export interface ToastMessage {

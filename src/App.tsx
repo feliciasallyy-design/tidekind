@@ -25,6 +25,7 @@ import { DossiersScreen } from './screens/DossiersScreen';
 import { CommunityFeedScreen } from './screens/CommunityFeedScreen';
 import { RecyclingScreen } from './screens/RecyclingScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
+import { AuthScreen } from './screens/AuthScreen';
 import { NavigatorScreen } from './screens/NavigatorScreen';
 import { api } from './services/api';
 
@@ -153,6 +154,8 @@ function AppContent() {
         return <RecyclingScreen onNavigate={setCurrentScreen} showToast={showToast} />;
       case 'profile':
         return <ProfileScreen onNavigate={setCurrentScreen} showToast={showToast} />;
+      case 'auth':
+        return <AuthScreen onNavigate={setCurrentScreen} showToast={showToast} />;
       case 'navigator':
         return <NavigatorScreen onNavigate={setCurrentScreen} showToast={showToast} />;
       default:
@@ -215,6 +218,7 @@ function AppContent() {
             { id: 'community-feed', label: '09 Feed' },
             { id: 'recycling', label: '10 Recycling' },
             { id: 'profile', label: '11 Profile' },
+            { id: 'auth', label: '12 Sign In' },
             { id: 'navigator', label: 'Navigator' },
           ].map((item) => (
             <button
@@ -243,8 +247,8 @@ function AppContent() {
             </button>
           ) : (
             <button
-              onClick={() => setAuthModalOpen(true)}
-              className="px-2.5 py-0.5 rounded-full bg-[#90f4e9] text-[#001f29] font-bold text-[10px] hover:bg-[#73d7cd] flex items-center gap-1"
+              onClick={() => setCurrentScreen('auth')}
+              className="px-2.5 py-0.5 rounded-full bg-[#90f4e9] text-[#001f29] font-bold text-[10px] hover:bg-[#73d7cd] flex items-center gap-1 shadow-xs"
             >
               <span className="material-symbols-outlined text-[12px]">login</span>
               <span>Sign In</span>

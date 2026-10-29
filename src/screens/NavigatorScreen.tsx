@@ -195,6 +195,16 @@ export const NavigatorScreen: React.FC<NavigatorScreenProps> = ({ onNavigate, sh
           action: 'View Profile',
           icon: 'account_circle',
         },
+        {
+          num: 'Screen 12',
+          id: 'auth' as ScreenId,
+          title: 'Steward Sign In & Access Portal',
+          tag: 'Access Portal',
+          desc: '1-click sign in for verified stewards, photo studio uploader, role & ocean berth configuration, and account recovery.',
+          meta: '1-Click Fast Auth',
+          action: 'Open Sign In',
+          icon: 'badge',
+        },
       ],
     },
   ];
@@ -206,11 +216,11 @@ export const NavigatorScreen: React.FC<NavigatorScreenProps> = ({ onNavigate, sh
         <div className="flex items-center gap-2 flex-wrap">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#90f4e9] text-[#00504a] text-xs font-bold shadow-xs">
             <span className="w-2 h-2 rounded-full bg-[#006a63] animate-ping"></span>
-            <span>11 Connected Screens</span>
+            <span>12 Connected Screens</span>
           </span>
           <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#e8eff7] text-[#002531] text-xs font-semibold">
             <span className="material-symbols-outlined text-sm">sailing</span>
-            <span>Bali & East Java Pilot</span>
+            <span>Global Ocean Pilot</span>
           </span>
         </div>
 
